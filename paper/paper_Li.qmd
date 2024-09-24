@@ -56,7 +56,7 @@ It focuses on capturing daily occupancy, vacancy, and capacity data through a sy
 
 \newpage
 
-# Model {#sec-model}
+# Result {#sec-model}
 
 ```{r}
 #| echo: false
