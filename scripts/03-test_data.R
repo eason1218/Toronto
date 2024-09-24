@@ -1,15 +1,23 @@
 #### Preamble ####
-# Purpose: Tests... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Tests clean_data data no obvious statistic mistakes. 
+# Author: YiZhuo Li
+# Date: Today
+# Contact: liyizhuo.li@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: Already have clean data
 
 
 #### Workspace setup ####
 library(tidyverse)
-# [...UPDATE THIS...]
 
-#### Test data ####
+data <- read_csv("C:\\Users\\EasonLi\\Downloads\\Toronto-main\\Toronto-main\\data\\analysis_data_clean.csv")
+
+#test 1 date
+date_format_test <- all(grepl("^\\d{4}-\\d{2}-\\d{2}$", data$OCCUPANCY_DATE))
+
+#test 2 rate > 0 
+rate_beds_test <- all(data$OCCUPANCY_RATE_BEDS[!is.na(data$OCCUPANCY_RATE_BEDS)] > 0)
+rate_rooms_test <- all(data$OCCUPANCY_RATE_ROOMS[!is.na(data$OCCUPANCY_RATE_ROOMS)] > 0)
+
+#test 3 capicity > 0
+capacity_test <- all(data$`Actual Bed Capacity`[!is.na(data$`Actual Bed Capacity`)] > 0)
