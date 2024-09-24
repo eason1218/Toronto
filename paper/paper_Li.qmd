@@ -1,5 +1,5 @@
 ---
-title: "Shelter Demand in Toronto: A Study of Capacity and Utilization(2024)"
+title: "Capacity and Utilization analysis of Toronto shelter(2024)"
 author:
   - YiZhuo Li
 thanks: "A GitHub Repository containing all data, R code, and other files used in this investigation is located here: <https://github.com/eason1218/Toronto_Shetler.git>"
@@ -45,9 +45,9 @@ With respect to the structure of this paper, @sec-data includes an overview of t
 
 ## Overview {#sec-data-overview}
 
-The dataset used in this analysis is from The "Daily Shelter & Overnight Service Usage" page , this website offers daily data of the occupancy and capacity of Toronto’s shelter system, including how many shelter beds are being used and the total available capacity, updated everyday except on weekends and holidays. 
+The dataset used in this analysis is from The "Daily Shelter & Overnight Service Usage" page , this website offers daily data of the occupancy and capacity of Toronto’s shelter system, including how many shelter beds are being used and the total available capacity, updated everyday except on weekends and holidays. The variables or measurements included in this analysis are "Bed Based Capacity", which refer to Occupancy is measured by the number of beds, typically for programs with shared sleeping areas; "Room Based Capacity" refer to ccupancy is measured by the number of rooms, usually for family programs or hotel-based programs where rooms are not shared between households.
 
-The variables or measurements included in this analysis are "Bed Based Capacity", which refer to Occupancy is measured by the number of beds, typically for programs with shared sleeping areas; "Room Based Capacity" refer to ccupancy is measured by the number of rooms, usually for family programs or hotel-based programs where rooms are not shared between households.
+Another dataset called "toronto-shelter-system-flow" also includes data about Toronto shelters, but it is more focused on the characteristics of people living in shelters, not the macro data so I did not choose it.
 
 Using the R programming language [@citeR], the `tidyverse` [@thereferencecanbewhatever] package were used to simulate the dataset and generate tests for it. The `opendatatoronto` [@citeopendatatoronto] and `tidyverse` [@thereferencecanbewhatever] packages were then applied in order to download the raw Toronto Public shelter dataset. Next, the `tidyverse` package [@thereferencecanbewhatever] was used to clean the raw dataset and test the cleaned dataset.
 
@@ -230,5 +230,6 @@ The data cleaning process involved filtering out some of the columns from the ra
 
 
 # References {#sec-references}
+
 
 
