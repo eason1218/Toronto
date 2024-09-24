@@ -28,5 +28,5 @@ shelter_cleaned_data <-
 
   
 #### Saving the Cleaned Dataset ####
-# 使用 write.csv() 
+
 write.csv(shelter_cleaned_data, "C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/analysis_data_clean.csv", row.names = FALSE)
