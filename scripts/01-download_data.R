@@ -11,7 +11,6 @@
 #### Workspace setup ####
 library(opendatatoronto)
 library(tidyverse)
-# [...UPDATE THIS...]
 
 #### Download data ####
 marriage_licence_packages <- search_packages("Daily Shelter & Overnight Service Occupancy & Capacity")
