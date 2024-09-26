@@ -20,9 +20,9 @@ bibliography: references.bib
 #| warning: false
 #| message: false
 
-#install.packages("tidyverse")
-#install.packages("opendatatoronto")
-#install.packages("here")
+# install.packages("tidyverse")
+# install.packages("opendatatoronto")
+# install.packages("here")
 library(tidyverse)
 library(opendatatoronto)
 library(here)
@@ -30,8 +30,6 @@ library(here)
 
 
 # Introduction
-
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
 
 Homelessness remains a significant social issue in many urban centers, and Toronto is no exception. The city’s shelter system serves as a critical component in providing relief to its homeless population. However, the increasing demand for these services, coupled with limited capacity, has highlighted potential gaps in Toronto’s ability to address this growing crisis. A comprehensive understanding of shelter utilization is essential to inform policies that can better support vulnerable populations.
 
@@ -49,7 +47,7 @@ The dataset used in this analysis is from The "Daily Shelter & Overnight Service
 
 Another dataset called "toronto-shelter-system-flow" also includes data about Toronto shelters, but it is more focused on the characteristics of people living in shelters, not the macro data so I did not choose it.
 
-Using the R programming language [@citeR], the `tidyverse` [@thereferencecanbewhatever] package were used to simulate the dataset and generate tests for it. The `opendatatoronto` [@citeopendatatoronto] and `tidyverse` [@thereferencecanbewhatever] packages were then applied in order to download the raw Toronto Public shelter dataset. Next, the `tidyverse` package [@thereferencecanbewhatever] was used to clean the raw dataset and test the cleaned dataset.
+The project is structure base on Rohan's principes [@rohan], and used the **R** programming language [@citeR], the `tidyverse` [@thereferencecanbewhatever] package were used to simulate the dataset and generate tests for it. The `opendatatoronto` [@citeopendatatoronto] and `tidyverse` [@thereferencecanbewhatever] packages were then applied in order to download the raw Toronto Public shelter dataset. Next, the `tidyverse` package [@thereferencecanbewhatever] was used to clean the raw dataset and test the cleaned dataset.
 
 ## Measurement {#sec-data-Measurement}
 It focuses on capturing daily occupancy, vacancy, and capacity data through a system snapshot taken at 4 a.m. each day. This approach ensures consistent, up-to-date information on the availability and usage of shelter services.
@@ -65,7 +63,7 @@ It focuses on capturing daily occupancy, vacancy, and capacity data through a sy
 
 #### Loading the Cleaned Dataset ####
 
-#outbreak_cleaned_data <- read_csv(here::here("outputs/data/cleaned_data.csv"))
+# outbreak_cleaned_data <- read_csv(here::here("outputs/data/cleaned_data.csv"))
 ```
 
 After loading the dataset using the R programming language [@citeR] and the `here` package [@citehere], the `tidyverse` [@thereferencecanbewhatever] package was used to generate graphs. In doing so, R code was adapted from [@tellingstorieswithdata].
@@ -85,14 +83,14 @@ marriage_licence_resources <- marriage_licence_packages %>%
   list_package_resources()
 # Display the list of resources available in the "Marriage Licence Statistics" package
 
-marriage_licence_statistics <- marriage_licence_resources[5,] %>%
+marriage_licence_statistics <- marriage_licence_resources[5, ] %>%
   get_resource()
-analysis_data = marriage_licence_statistics
+analysis_data <- marriage_licence_statistics
 
 invisible(Sys.setlocale("LC_TIME", "C"))
 
 # Assuming analysis_data is already loaded and contains the necessary fields
-analysis_data$OCCUPANCY_DATE <- as.Date(analysis_data$OCCUPANCY_DATE, format="%Y-%m-%d")
+analysis_data$OCCUPANCY_DATE <- as.Date(analysis_data$OCCUPANCY_DATE, format = "%Y-%m-%d")
 
 # Group by date and calculate the average bed and room occupancy rates
 daily_occupancy_rate <- analysis_data %>%
@@ -110,7 +108,6 @@ ggplot(daily_occupancy_rate, aes(x = OCCUPANCY_DATE)) +
   theme_minimal() +
   scale_color_manual(values = c("Bed Occupancy Rate" = "blue", "Room Occupancy Rate" = "red")) +
   theme(legend.title = element_blank())
-  
 ```
 @fig-occupancy-rates shows the occupancy rates for beds and rooms in the shelter system over time. The blue line represents the bed occupancy rate, while the red line represents the room occupancy rate. Overall, the room occupancy rate (red) is higher and more stable, staying close to 100%. In contrast, the bed occupancy rate (blue) shows more fluctuations, generally ranging between 98% and 99%.
 
@@ -133,18 +130,18 @@ avg_occupancy_rate <- avg_occupancy_rate[order(avg_occupancy_rate$OCCUPANCY_RATE
 
 # Plot the bar chart with smaller text
 ggplot(avg_occupancy_rate, aes(x = reorder(LOCATION_NAME, OCCUPANCY_RATE_BEDS), y = OCCUPANCY_RATE_BEDS)) +
-  geom_bar(stat = "identity", fill = "skyblue", width = 0.6) +  # Use a more pleasing color
-  coord_flip() +  # Flip to make it horizontal
+  geom_bar(stat = "identity", fill = "skyblue", width = 0.6) + # Use a more pleasing color
+  coord_flip() + # Flip to make it horizontal
   labs(title = "", x = "Location", y = "Occupancy Rate (%)") +
-  theme_minimal() +  # Clean theme for better aesthetics
+  theme_minimal() + # Clean theme for better aesthetics
   theme(
-    plot.title = element_text(size = 10, face = "bold", hjust = 0.5),  # Smaller title size
-    axis.title = element_text(size = 9),  # Smaller axis title size
-    axis.text.x = element_text(size = 7),  # Smaller size of x-axis text
-    axis.text.y = element_text(size = 3.8),  # Smaller size of y-axis text (locations)
-    panel.grid.major.y = element_blank()  # Remove y-axis grid lines for better readability
+    plot.title = element_text(size = 10, face = "bold", hjust = 0.5), # Smaller title size
+    axis.title = element_text(size = 9), # Smaller axis title size
+    axis.text.x = element_text(size = 7), # Smaller size of x-axis text
+    axis.text.y = element_text(size = 3.8), # Smaller size of y-axis text (locations)
+    panel.grid.major.y = element_blank() # Remove y-axis grid lines for better readability
   ) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 100))  # Ensure bars stay within 0-100% limits
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 100)) # Ensure bars stay within 0-100% limits
 ```
 
 ```{r}
@@ -159,11 +156,13 @@ scatter_data <- na.omit(analysis_data[, c("CAPACITY_ACTUAL_BED", "OCCUPANCY_RATE
 
 # Create a scatter plot using ggplot2
 ggplot(scatter_data, aes(x = CAPACITY_ACTUAL_BED, y = OCCUPANCY_RATE_BEDS)) +
-  geom_point(alpha = 0.7, size = 1) +  # Set point size to 1 and transparency to 0.7
-  labs(title = "", 
-       x = "Actual Bed Capacity", 
-       y = "Occupancy Rate (Beds)") +
-  theme_minimal()  # Use minimal theme
+  geom_point(alpha = 0.7, size = 1) + # Set point size to 1 and transparency to 0.7
+  labs(
+    title = "",
+    x = "Actual Bed Capacity",
+    y = "Occupancy Rate (Beds)"
+  ) +
+  theme_minimal() # Use minimal theme
 ```
 
 @fig-occupancy-capital-relat displays the average occupancy rate across various shelters. The X-axis represents the occupancy rate percentage (Occupancy Rate %), ranging from 0% to 100%, while the Y-axis lists the shelter locations (Location), showing the names of several shelters. Each horizontal blue bar corresponds to the average occupancy rate of a specific shelter. Most shelters have an occupancy rate close to 100%, indicating that their beds are almost fully or completely occupied. A few shelters have occupancy rates below 75%, showing that they have relatively lower bed utilization. 
@@ -230,6 +229,3 @@ The data cleaning process involved filtering out some of the columns from the ra
 
 
 # References {#sec-references}
-
-
-
