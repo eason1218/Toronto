@@ -23,9 +23,10 @@ bibliography: references.bib
 # install.packages("tidyverse")
 # install.packages("opendatatoronto")
 # install.packages("here")
-library(tidyverse)
 library(opendatatoronto)
+library(tidyverse)
 library(here)
+library(knitr)
 ```
 
 
@@ -52,6 +53,25 @@ The project is structure base on Rohan's principes [@rohan], and used the **R** 
 ## Measurement {#sec-data-Measurement}
 It focuses on capturing daily occupancy, vacancy, and capacity data through a system snapshot taken at 4 a.m. each day. This approach ensures consistent, up-to-date information on the availability and usage of shelter services.
 
+```{r}
+#| label: tbl-sample
+#| echo: false
+#| warning: false
+#| message: false
+# Load the data from the specified path
+data <- read.csv("C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/analysis_data_clean.csv")
+
+# Display the first 5 rows with all columns
+kable(head(data, 5),
+  caption = "Table: Sample of cleaned occupancy data",
+  col.names = c(
+    "Occupancy Date", "Occupancy Rate (Beds)", "Occupancy Rate (Rooms)",
+    "Location Name", "Actual Bed Capacity", "Sector"
+  )
+)
+```                    
+
+@tbl-sample show a sample of cleaned occupancy data, Since the statistical record formats of different shelters are different, each row contains different information marked as NA, but this does not negattive affect the analysis.
 \newpage
 
 # Result {#sec-model}
@@ -119,31 +139,38 @@ ggplot(daily_occupancy_rate, aes(x = OCCUPANCY_DATE)) +
 #| echo: false
 #| warning: false
 #| message: false
-# Convert OCCUPANCY_RATE_BEDS to numeric (in case of any issues during import)
-analysis_data$OCCUPANCY_RATE_BEDS <- as.numeric(analysis_data$OCCUPANCY_RATE_BEDS)
+#|
+# 转换 'OCCUPANCY_RATE_BEDS' 为数值型，过滤掉缺失值
+analysis_data <- analysis_data %>%
+  mutate(OCCUPANCY_RATE_BEDS = as.numeric(OCCUPANCY_RATE_BEDS)) %>%
+  filter(!is.na(OCCUPANCY_RATE_BEDS))
 
-# Calculate the average occupancy rate per location
-avg_occupancy_rate <- aggregate(OCCUPANCY_RATE_BEDS ~ LOCATION_NAME, analysis_data, mean, na.rm = TRUE)
+# 计算每个位置和 sector 的平均占用率
+avg_occupancy_rate <- analysis_data %>%
+  group_by(SECTOR, LOCATION_NAME) %>%
+  summarize(OCCUPANCY_RATE_BEDS = mean(OCCUPANCY_RATE_BEDS, na.rm = TRUE)) %>%
+  arrange(SECTOR, OCCUPANCY_RATE_BEDS)
 
-# Sort the data by occupancy rate
-avg_occupancy_rate <- avg_occupancy_rate[order(avg_occupancy_rate$OCCUPANCY_RATE_BEDS), ]
+sector_colors <- c("Men" = "#66c2a5", "Mixed Adult" = "#fc8d62", "Women" = "#8da0cb", "Youth" = "#e78ac3")
 
-# Plot the bar chart with smaller text
-ggplot(avg_occupancy_rate, aes(x = reorder(LOCATION_NAME, OCCUPANCY_RATE_BEDS), y = OCCUPANCY_RATE_BEDS)) +
-  geom_bar(stat = "identity", fill = "skyblue", width = 0.6) + # Use a more pleasing color
-  coord_flip() + # Flip to make it horizontal
-  labs(title = "", x = "Location", y = "Occupancy Rate (%)") +
-  theme_minimal() + # Clean theme for better aesthetics
+
+ggplot(avg_occupancy_rate, aes(x = reorder(LOCATION_NAME, OCCUPANCY_RATE_BEDS), y = OCCUPANCY_RATE_BEDS, fill = SECTOR)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  coord_flip() +
+  labs(title = "", x = "", y = " (%)") +
+  theme_minimal() +
   theme(
-    plot.title = element_text(size = 10, face = "bold", hjust = 0.5), # Smaller title size
-    axis.title = element_text(size = 9), # Smaller axis title size
-    axis.text.x = element_text(size = 7), # Smaller size of x-axis text
-    axis.text.y = element_text(size = 3.8), # Smaller size of y-axis text (locations)
-    panel.grid.major.y = element_blank() # Remove y-axis grid lines for better readability
+    plot.title = element_text(size = 0, face = "bold", hjust = 0.5),
+    axis.title = element_text(size = 0),
+    axis.text.x = element_text(size = 5),
+    axis.text.y = element_text(size = 4),
+    panel.grid.major.y = element_blank(),
+    legend.position = "none"
   ) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 100)) # Ensure bars stay within 0-100% limits
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 100)) +
+  facet_wrap(~SECTOR, scales = "free_y", ncol = 2) +
+  scale_fill_manual(values = sector_colors)
 ```
-
 ```{r}
 #| label: fig-occupancy-capital-123
 #| fig-cap: Scatter Plot of Bed Capacity vs. Occupancy Rate
@@ -165,7 +192,7 @@ ggplot(scatter_data, aes(x = CAPACITY_ACTUAL_BED, y = OCCUPANCY_RATE_BEDS)) +
   theme_minimal() # Use minimal theme
 ```
 
-@fig-occupancy-capital-relat displays the average occupancy rate across various shelters. The X-axis represents the occupancy rate percentage (Occupancy Rate %), ranging from 0% to 100%, while the Y-axis lists the shelter locations (Location), showing the names of several shelters. Each horizontal blue bar corresponds to the average occupancy rate of a specific shelter. Most shelters have an occupancy rate close to 100%, indicating that their beds are almost fully or completely occupied. A few shelters have occupancy rates below 75%, showing that they have relatively lower bed utilization. 
+@fig-occupancy-capital-relat displays the average occupancy rate across various shelters, categorized by sector: Men, Women, Mixed Adult, and Youth. The X-axis represents the occupancy rate percentage (Occupancy Rate %), ranging from 0% to 100%, while the Y-axis lists the shelter locations (Location), showing the names of several shelters. Each horizontal blue bar corresponds to the average occupancy rate of a specific shelter. Most shelters have an occupancy rate close to 100%, indicating that their beds are almost fully or completely occupied. A few shelters have occupancy rates below 75%, showing that they have relatively lower bed utilization. 
 
 \newpage
 
@@ -186,7 +213,7 @@ From a policy perspective, the findings call for a dual approach to addressing h
 
 ## Second discussion point
 
-@fig-occupancy-capital-relat paints a sobering picture of Toronto's shelter system, with most facilities operating at or near full capacity. This level of demand points to a systemic issue that extends beyond shelter availability to broader socioeconomic challenges. The high occupancy rates reflect not just a lack of shelters but underline key drivers of homelessness, such as inadequate affordable housing, mental health challenges, unemployment, and other economic pressures.
+@fig-occupancy-capital-relat reveals that across all sectors—Men, Women, Mixed Adults, and Youth. Both show a sobering picture of Toronto's shelter system, with most facilities operating at or near full capacity—this level of demand points to a systemic issue that extends beyond shelter availability to broader socioeconomic challenges. The high occupancy rates reflect not just a lack of shelters but also underline key drivers of homelessness, such as inadequate affordable housing, mental health challenges, unemployment, and other economic pressures.
 
 The shelters operating below 75% capacity may indicate inefficiencies in resource allocation or barriers to accessibility. These disparities raise critical questions: Are some shelters harder to access due to location or transportation issues? Are the services provided in certain shelters of lower quality, causing individuals to avoid them? These issues suggest that future interventions should not only focus on increasing shelter capacity but also on improving the quality and accessibility of services across all shelters to ensure a more equitable distribution of resources.
 
@@ -217,7 +244,7 @@ Sketches depicting both the desired dataset and the graphs generated in this ana
 
 ## Data Cleaning {#sec-appendix-cleaning}
 
-The data cleaning process involved filtering out some of the columns from the raw dataset and renaming some of the data entries for clarity and simplicity.
+The data cleaning process involved selecting some columns of useful: occupancy date, bed and room occupancy rates, location name, actual bed capacity, and sector. To improve clarity, the column "CAPACITY_ACTUAL_BED" is renamed to "Actual Bed Capacity". 
 
 ## Attribution Statement {#sec-appendix-attribution}
 
@@ -229,3 +256,5 @@ The data cleaning process involved filtering out some of the columns from the ra
 
 
 # References {#sec-references}
+
+
