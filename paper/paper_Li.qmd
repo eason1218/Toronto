@@ -38,7 +38,7 @@ This paper analyzes Toronto’s 2024 shelter occupancy and capacity data, focusi
 
 The findings show that most shelters operate near or at full capacity, underscoring the urgent need for expanded services. These results are crucial for informing future social policies aimed at mitigating homelessness, particularly in rapidly growing urban environments like Toronto.
 
-With respect to the structure of this paper, @sec-data includes an overview of the data and @sec-model show the results of model; @sec-discussion includes a discussion of the results; and @sec-appendix includes supplementary information.
+With respect to the structure of this paper, @sec-data includes an overview of the data and show the results of model; @sec-discussion includes a discussion of the results; and @sec-appendix includes supplementary information.
 
 # Data {#sec-data}
 
@@ -74,7 +74,7 @@ kable(head(data, 5),
 @tbl-sample show a sample of cleaned occupancy data, Since the statistical record formats of different shelters are different, each row contains different information marked as NA, but this does not negattive affect the analysis.
 \newpage
 
-# Result {#sec-model}
+## analysis {#sec-data-analysis}
 
 ```{r}
 #| echo: false
@@ -127,7 +127,7 @@ ggplot(daily_occupancy_rate, aes(x = OCCUPANCY_DATE)) +
   labs(title = "", x = "Date", y = "Occupancy Rate (%)") +
   theme_minimal() +
   scale_color_manual(values = c("Bed Occupancy Rate" = "blue", "Room Occupancy Rate" = "red")) +
-  theme(legend.title = element_blank())
+  theme(legend.position = "top", legend.title = element_blank())
 ```
 @fig-occupancy-rates shows the occupancy rates for beds and rooms in the shelter system over time. The blue line represents the bed occupancy rate, while the red line represents the room occupancy rate. Overall, the room occupancy rate (red) is higher and more stable, staying close to 100%. In contrast, the bed occupancy rate (blue) shows more fluctuations, generally ranging between 98% and 99%.
 
