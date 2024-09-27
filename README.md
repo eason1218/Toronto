@@ -8,7 +8,7 @@ This repo provides a comprehensive analysis of shelter availability, capacity, a
 ## File Structure
 
 The repo is structured as:
-
+-   `data/simulate_data` provide a simulate data.
 -   `data/raw_data` contains the raw data as obtained from X.
 -   `data/analysis_data_clean` contains the cleaned dataset that was constructed.
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.
