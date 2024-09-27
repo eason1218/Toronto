@@ -12,7 +12,7 @@
 library(tidyverse)
 
 #### Cleaning the Dataset ####
-shelter_raw_data <- read_csv("C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/raw_data.csv")
+shelter_raw_data <- read_csv("data/raw_data/raw_data.csv")
 
 shelter_cleaned_data <-
   shelter_raw_data |>
@@ -26,4 +26,4 @@ shelter_cleaned_data <-
 
 
 #### Saving the Cleaned Dataset ####
-write.csv(shelter_cleaned_data, "C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/analysis_data_clean.csv", row.names = FALSE)
+write.csv(shelter_cleaned_data, "data/analysis_data/analysis_data_clean.csv")
