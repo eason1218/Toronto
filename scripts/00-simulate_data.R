@@ -24,4 +24,4 @@ simulated_data <- data.frame(
 head(simulated_data)
 
 # Save the simulated data to a CSV file
-write.csv(simulated_data, "C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/simulate_data/simulated_shelter_data.csv", row.names = FALSE)
+write.csv(simulated_data, "data/simulate_data/simulated_shelter_data.csv")
