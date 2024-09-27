@@ -18,17 +18,12 @@ shelter_cleaned_data <-
   shelter_raw_data |>
   select(
     `OCCUPANCY_DATE`, `OCCUPANCY_RATE_BEDS`,
-    `OCCUPANCY_RATE_ROOMS`, `LOCATION_NAME`, `CAPACITY_ACTUAL_BED`
+    `OCCUPANCY_RATE_ROOMS`, `LOCATION_NAME`, `CAPACITY_ACTUAL_BED`, `SECTOR`
   ) |>
   rename(
-    `OCCUPANCY_DATE` = `OCCUPANCY_DATE`,
-    `OCCUPANCY_RATE_BEDS` = `OCCUPANCY_RATE_BEDS`,
-    `OCCUPANCY_RATE_ROOMS` = `OCCUPANCY_RATE_ROOMS`,
-    `LOCATION_NAME` = `LOCATION_NAME`,
     `Actual Bed Capacity` = `CAPACITY_ACTUAL_BED`
   )
 
 
 #### Saving the Cleaned Dataset ####
-# 使用 write.csv()
 write.csv(shelter_cleaned_data, "C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/analysis_data_clean.csv", row.names = FALSE)
