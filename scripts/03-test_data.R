@@ -10,7 +10,7 @@
 #### Workspace setup ####
 library(tidyverse)
 
-data <- read_csv("C:\\Users\\EasonLi\\Downloads\\Toronto-main\\Toronto-main\\data\\analysis_data_clean.csv")
+data <- read_csv("data/raw_data/raw_data.csv")
 
 # test 1 date
 date_format_test <- all(grepl("^\\d{4}-\\d{2}-\\d{2}$", data$OCCUPANCY_DATE))
