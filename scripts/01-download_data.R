@@ -23,5 +23,5 @@ marriage_licence_statistics <- marriage_licence_resources[5, ] %>%
   get_resource()
 analysis_data <- marriage_licence_statistics
 
-write.csv(analysis_data, "C:/Users/EasonLi/Downloads/Toronto-main/Toronto-main/data/raw_data.csv", row.names = FALSE)
+write.csv(analysis_data, "data/raw_data/raw_data.csv")
 
